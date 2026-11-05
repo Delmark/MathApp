@@ -27,10 +27,45 @@ public class Calculator {
         return op != '(' && op != ')';
     }
 
+    private static void validateExpression(String expression) {
+        Stack<Character> openBracketStack = new Stack<>();
+        for (int i = 0; i < expression.length(); i++) {
+            char symbol = expression.charAt(i);
 
-    public static String calculate(String expression) {
+            boolean digitOrDot = Character.isDigit(symbol) || symbol == '.';
+            if (!digitOrDot && !supportedSyntax.contains(String.valueOf(symbol)) && i + 3 < expression.length()) {
+                String potentialFunction = expression.substring(i, i + 3);
+                if (functionOperators.contains(potentialFunction)) {
+                    i += 2;
+                } else {
+                    throw new IllegalArgumentException("Error: unrecognized functions/operators on expression");
+                }
+            }
+
+            if (symbol == '(') {
+                openBracketStack.push(symbol);
+            }
+            if (symbol == ')') {
+                if (openBracketStack.isEmpty()) {
+                    throw new IllegalArgumentException("Error: Incorrect bracket placement");
+                }
+                openBracketStack.pop();
+            }
+        }
+    }
+
+
+    public static double calculate(String expression) {
+        if (expression == null || expression.isEmpty()) {
+            throw new IllegalArgumentException("Expression can't be null or empty");
+        }
         expression = expression.replace(" ", "");
-        Stack<Float> numbers = new Stack<>();
+        validateExpression(expression);
+        return calculateExpression(expression);
+    }
+
+    private static double calculateExpression(String expression) {
+        Stack<Double> numbers = new Stack<>();
         Stack<String> operators = new Stack<>();
 
         int prevOpIdx = -1;
@@ -44,7 +79,7 @@ public class Calculator {
             }
 
             // если полученный нами символ не какой-либо допустимый синтаксический символ
-            // калькулятора - это скорее всего часть функции или число, скипаем
+            // калькулятора - это часть функции или число, скипаем
             String operator = String.valueOf(currentChar);
             if (!supportedSyntax.contains(operator)) {
                 continue;
@@ -52,7 +87,7 @@ public class Calculator {
 
             // записываем минус после скобки/другого оператора как '*-1' в стек
             if (currentChar == '-' && (i == 0 || ((isOp(expression.charAt(i - 1))) || expression.charAt(i - 1) == '('))) {
-                numbers.push(-1f);
+                numbers.push(-1.);
                 operators.push("*");
                 prevOpIdx = i;
                 continue;
@@ -105,12 +140,12 @@ public class Calculator {
             processTopOperation(numbers, operators);
         }
 
-        return String.valueOf(numbers.pop());
+        return numbers.pop();
     }
 
-    private static void parseAndPutNumberIntoStack(String expression, int prevOpIdx, int i, Stack<Float> numbers) {
+    private static void parseAndPutNumberIntoStack(String expression, int prevOpIdx, int i, Stack<Double> numbers) {
         String strNum = expression.substring(prevOpIdx + 1, i);
-        float num = Float.parseFloat(strNum);
+        double num = Float.parseFloat(strNum);
         numbers.push(num);
     }
 
@@ -129,25 +164,25 @@ public class Calculator {
             || isPriority(currentOp) < isPriority(prevOp);
     }
 
-    private static void processTopOperation(Stack<Float> numbers, Stack<String> operators) {
+    private static void processTopOperation(Stack<Double> numbers, Stack<String> operators) {
         String op = operators.pop();
 
         // оператор размеров в 1 символ - примитив, более - функция
-        float result;
+        double result;
         if (op.length() == 1) {
-            float n1 = numbers.pop();
-            float n2 = numbers.pop();
+            double n1 = numbers.pop();
+            double n2 = numbers.pop();
             result = switch (op) {
                 case "+" -> n2 + n1;
                 case "-" -> n2 - n1;
                 case "*" -> n2 * n1;
                 case "/" -> n2 / n1;
-                case "^" -> (float) Math.pow(n2, n1);
+                case "^" -> Math.pow(n2, n1);
                 default -> throw new IllegalArgumentException("incorrect op");
             };
         } else {
-            float functionArg = numbers.pop();
-            result = (float) switch (op) {
+            double functionArg = numbers.pop();
+            result = switch (op) {
                 case "sin" -> Math.sin(functionArg);
                 case "cos" -> Math.cos(functionArg);
                 case "tan" -> Math.tan(functionArg);
