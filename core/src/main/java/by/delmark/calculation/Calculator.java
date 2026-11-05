@@ -176,7 +176,12 @@ public class Calculator {
                 case "+" -> n2 + n1;
                 case "-" -> n2 - n1;
                 case "*" -> n2 * n1;
-                case "/" -> n2 / n1;
+                case "/" -> {
+                    if (n1 == 0) {
+                        throw new ArithmeticException("Error: Divide to zero");
+                    }
+                    yield n2 / n1;
+                }
                 case "^" -> Math.pow(n2, n1);
                 default -> throw new IllegalArgumentException("incorrect op");
             };
