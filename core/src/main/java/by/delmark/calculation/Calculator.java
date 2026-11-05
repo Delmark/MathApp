@@ -9,6 +9,8 @@ public class Calculator {
     private static final Set<String> primitiveOperators = Set.of("+", "-", "/", "*", "^");
     private static final Set<String> functionOperators = Set.of("sin", "cos", "tan", "ctg", "abs");
 
+    // утилиты под операторы
+
     private static int isPriority(String op) {
         return switch (op){
             case "+", "-" -> 0;
@@ -27,6 +29,17 @@ public class Calculator {
         return op != '(' && op != ')';
     }
 
+    // калькулятор
+
+    public static double calculate(String expression) {
+        if (expression == null || expression.isEmpty()) {
+            throw new IllegalArgumentException("Expression can't be null or empty");
+        }
+        expression = expression.replace(" ", "");
+        validateExpression(expression);
+        return calculateExpression(expression);
+    }
+
     private static void validateExpression(String expression) {
         Stack<Character> openBracketStack = new Stack<>();
         for (int i = 0; i < expression.length(); i++) {
@@ -35,7 +48,7 @@ public class Calculator {
             boolean digitOrDot = Character.isDigit(symbol) || symbol == '.';
             if (!digitOrDot && !supportedSyntax.contains(String.valueOf(symbol)) && i + 3 < expression.length()) {
                 String potentialFunction = expression.substring(i, i + 3);
-                if (functionOperators.contains(potentialFunction)) {
+                if (functionOperators.contains(potentialFunction) && expression.charAt(i + 3) == '(') {
                     i += 2;
                 } else {
                     throw new IllegalArgumentException("Error: unrecognized functions/operators on expression");
@@ -52,16 +65,9 @@ public class Calculator {
                 openBracketStack.pop();
             }
         }
-    }
-
-
-    public static double calculate(String expression) {
-        if (expression == null || expression.isEmpty()) {
-            throw new IllegalArgumentException("Expression can't be null or empty");
+        if (!openBracketStack.isEmpty()) {
+            throw new IllegalArgumentException("Error: Incorrect bracket placement");
         }
-        expression = expression.replace(" ", "");
-        validateExpression(expression);
-        return calculateExpression(expression);
     }
 
     private static double calculateExpression(String expression) {
@@ -145,7 +151,7 @@ public class Calculator {
 
     private static void parseAndPutNumberIntoStack(String expression, int prevOpIdx, int i, Stack<Double> numbers) {
         String strNum = expression.substring(prevOpIdx + 1, i);
-        double num = Float.parseFloat(strNum);
+        double num = Double.parseDouble(strNum);
         numbers.push(num);
     }
 
