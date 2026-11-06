@@ -1,31 +1,27 @@
 package by.delmark;
 
-import by.delmark.ui.ApplicationContainer;
+import by.delmark.ui.MainContainer;
+import by.delmark.ui.TextureManager;
 import by.delmark.ui.TopBarContainer;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ApplicationClass extends ApplicationAdapter {
 
     private Stage mainScreen;
     private TopBarContainer topBarContainer;
-    private ApplicationContainer applicationContainer;
+    private MainContainer mainContainer;
 
-    private Texture pixelTexture;
-    TextureRegionDrawable drawable;
+    private TextureManager textureManager = new TextureManager();
 
     @Override
     public void create() {
         mainScreen = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(mainScreen);
-        loadTextures();
+        textureManager.loadTextures();
         setUpUI();
     }
 
@@ -46,27 +42,16 @@ public class ApplicationClass extends ApplicationAdapter {
     @Override
     public void dispose() {
         mainScreen.dispose();
-        pixelTexture.dispose();
-    }
-
-    private void loadTextures() {
-        Pixmap pixel = new Pixmap(1, 1, Pixmap.Format.RGB888);
-        pixel.setColor(Color.WHITE);
-
-        pixel.fill();
-        pixelTexture = new Texture(pixel);
-        pixel.dispose();
-
-        drawable = new TextureRegionDrawable(pixelTexture);
+        textureManager.clearTextures();
     }
 
     private void setUpUI() {
-        topBarContainer = new TopBarContainer(drawable);
-        applicationContainer = new ApplicationContainer(drawable);
-        topBarContainer.addListener(applicationContainer.getSwitchModeListener());
+        topBarContainer = new TopBarContainer(textureManager);
+        mainContainer = new MainContainer(textureManager);
+        topBarContainer.addListener(mainContainer.getSwitchModeListener());
 
         mainScreen.addActor(topBarContainer);
-        mainScreen.addActor(applicationContainer);
+        mainScreen.addActor(mainContainer);
 
         updateContainerBounds();
     }
@@ -79,6 +64,6 @@ public class ApplicationClass extends ApplicationAdapter {
         float appContainerHeight = height - topBarHeight;
 
         topBarContainer.setBounds(0, appContainerHeight, width, topBarHeight);
-        applicationContainer.setBounds(0, 0, width, appContainerHeight);
+        mainContainer.setBounds(0, 0, width, appContainerHeight);
     }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class ApplicationContainer extends Table {
+public class MainContainer extends Table {
 
     private ApplicationMode appMode = ApplicationMode.CALC;
 
@@ -17,9 +17,9 @@ public class ApplicationContainer extends Table {
         return false;
     });
 
-    public ApplicationContainer(TextureRegionDrawable drawable) {
+    public MainContainer(TextureManager textureManager) {
         super();
-        this.setBackground(drawable.tint(new Color(0x303446FF)));
+        this.setBackground(textureManager.getBaseDrawable().tint(new Color(0x303446FF)));
     }
 
     public EventListener getSwitchModeListener() {
