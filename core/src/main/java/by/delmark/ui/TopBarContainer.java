@@ -45,12 +45,11 @@ public class TopBarContainer extends Table {
         Button topBarButton = new Button(buttonStyle);
         topBarButton.align(Align.center);
         if (buttonIcon != null) {
-            topBarButton.add(new Image(buttonIcon));
+            topBarButton.add(new Image(buttonIcon)).grow();
         }
 
         add(topBarButton)
-            .width(25)
-            .height(Value.percentHeight(0.80f, this))
+            .size(Value.percentHeight(0.85f, this))
             .pad(3f);
 
         // уродливые хэндлеры, придумай чето получше

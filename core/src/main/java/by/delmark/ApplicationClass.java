@@ -60,7 +60,7 @@ public class ApplicationClass extends ApplicationAdapter {
         float width = mainScreen.getWidth();
         float height = mainScreen.getHeight();
 
-        float topBarHeight = Math.max(30, mainScreen.getHeight() * 0.05f);
+        float topBarHeight = Math.max(50, mainScreen.getHeight() * 0.06f);
         float appContainerHeight = height - topBarHeight;
 
         topBarContainer.setBounds(0, appContainerHeight, width, topBarHeight);
