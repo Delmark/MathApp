@@ -8,6 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class TextureManager {
 
+    // бойлер под синглтон
+
+    private TextureManager() {}
+    private final static TextureManager instance = new TextureManager();
+
+    public static TextureManager getInstance() {
+        return instance;
+    }
+
+    // сам менеджер
+
     private TextureRegionDrawable baseDrawable;
     private Texture pixelTexture;
 

@@ -1,8 +1,9 @@
 package by.delmark;
 
-import by.delmark.ui.MainContainer;
+import by.delmark.ui.views.ApplicationMainWindow;
 import by.delmark.ui.TextureManager;
-import by.delmark.ui.TopBarContainer;
+import by.delmark.ui.views.ApplicationTopBar;
+import by.delmark.ui.listeners.AppModeSwitchListener;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,10 +13,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class ApplicationClass extends ApplicationAdapter {
 
     private Stage mainScreen;
-    private TopBarContainer topBarContainer;
-    private MainContainer mainContainer;
-
-    private TextureManager textureManager = new TextureManager();
+    private ApplicationTopBar topBar;
+    private ApplicationMainWindow mainWindow;
+    private final TextureManager textureManager = TextureManager.getInstance();
 
     @Override
     public void create() {
@@ -46,12 +46,14 @@ public class ApplicationClass extends ApplicationAdapter {
     }
 
     private void setUpUI() {
-        topBarContainer = new TopBarContainer(textureManager);
-        mainContainer = new MainContainer(textureManager);
-        topBarContainer.addListener(mainContainer.getSwitchModeListener());
+        topBar = new ApplicationTopBar();
+        mainWindow = new ApplicationMainWindow();
 
-        mainScreen.addActor(topBarContainer);
-        mainScreen.addActor(mainContainer);
+        // регаем хэндлер событий на нажатия кнопочек по смене окон в топ баре
+        topBar.addListener(new AppModeSwitchListener(mainWindow));
+
+        mainScreen.addActor(topBar);
+        mainScreen.addActor(mainWindow);
 
         updateContainerBounds();
     }
@@ -63,7 +65,7 @@ public class ApplicationClass extends ApplicationAdapter {
         float topBarHeight = Math.max(50, mainScreen.getHeight() * 0.06f);
         float appContainerHeight = height - topBarHeight;
 
-        topBarContainer.setBounds(0, appContainerHeight, width, topBarHeight);
-        mainContainer.setBounds(0, 0, width, appContainerHeight);
+        topBar.setBounds(0, appContainerHeight, width, topBarHeight);
+        mainWindow.setBounds(0, 0, width, appContainerHeight);
     }
 }

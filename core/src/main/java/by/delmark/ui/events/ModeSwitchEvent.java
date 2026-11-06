@@ -1,5 +1,6 @@
-package by.delmark.ui;
+package by.delmark.ui.events;
 
+import by.delmark.ui.views.ApplicationMode;
 import com.badlogic.gdx.scenes.scene2d.Event;
 
 public class ModeSwitchEvent extends Event {
