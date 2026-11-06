@@ -1,6 +1,7 @@
 package by.delmark.ui.views;
 
 import by.delmark.ui.TextureManager;
+import by.delmark.ui.utils.CatppuchinPalette;
 import by.delmark.ui.utils.UiUtils;
 import by.delmark.ui.events.ModeSwitchEvent;
 import com.badlogic.gdx.graphics.Color;
@@ -16,14 +17,10 @@ import com.badlogic.gdx.utils.Null;
 public class ApplicationTopBar extends Table {
 
     private final TextureManager textureManager = TextureManager.getInstance();
-    private final Color upBtnColor = new Color(0x626880FF);
-    private final Color downBtnColor = new Color(0x4B5063FF);
 
     public ApplicationTopBar() {
         super();
-        Color topBarBG = new Color(0x737994FF);
-        this.setBackground(textureManager.getBaseDrawable().tint(topBarBG));
-
+        this.setBackground(textureManager.getBaseDrawable().tint(CatppuchinPalette.OVERLAY));
         initButtons();
         left();
     }
@@ -34,8 +31,8 @@ public class ApplicationTopBar extends Table {
     }
 
     private void initButton(ApplicationMode buttonMode, @Null Texture buttonIcon) {
-        Drawable upDraw = textureManager.getBaseDrawable().tint(upBtnColor);
-        Drawable downDraw = textureManager.getBaseDrawable().tint(downBtnColor);
+        Drawable upDraw = textureManager.getBaseDrawable().tint(CatppuchinPalette.SURFACE_2);
+        Drawable downDraw = textureManager.getBaseDrawable().tint(CatppuchinPalette.SURFACE_0);
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle(upDraw, downDraw, null);
 
         Button topBarButton = new Button(buttonStyle);

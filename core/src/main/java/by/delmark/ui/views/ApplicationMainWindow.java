@@ -1,7 +1,7 @@
 package by.delmark.ui.views;
 
 import by.delmark.ui.TextureManager;
-import com.badlogic.gdx.graphics.Color;
+import by.delmark.ui.utils.CatppuchinPalette;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -15,7 +15,7 @@ public class ApplicationMainWindow extends Container<Table> {
     public ApplicationMainWindow() {
         super();
         TextureManager textureManager = TextureManager.getInstance();
-        this.setBackground(textureManager.getBaseDrawable().tint(new Color(0x303446FF)));
+        this.setBackground(textureManager.getBaseDrawable().tint(CatppuchinPalette.BASE_BACKGROUND));
         fill();
         initWindows();
     }
