@@ -20,7 +20,7 @@ public class ApplicationTopBar extends Table {
 
     public ApplicationTopBar() {
         super();
-        this.setBackground(textureManager.getBaseDrawable().tint(CatppuchinPalette.OVERLAY));
+        this.setBackground(textureManager.getBaseDrawable().tint(CatppuchinPalette.SURFACE_1));
         initButtons();
         left();
     }

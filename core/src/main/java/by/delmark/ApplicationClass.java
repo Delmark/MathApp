@@ -20,6 +20,7 @@ public class ApplicationClass extends ApplicationAdapter {
     @Override
     public void create() {
         mainScreen = new Stage(new ScreenViewport());
+        mainScreen.setDebugAll(true);
         Gdx.input.setInputProcessor(mainScreen);
         textureManager.loadTextures();
         setUpUI();
